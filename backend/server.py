@@ -85,7 +85,7 @@ def run_model():
         .argmax(0)
     )
     mask = Image.fromarray(
-        ((1 - mask.squeeze(0).byte().numpy()) * 127) + 100
+        ((1 - mask.squeeze(0).byte().numpy()) * 127) + 127
     ).convert("L")
 
     original_image.putalpha(mask)
