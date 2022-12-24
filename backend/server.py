@@ -38,6 +38,8 @@ def add_header(r):
 @app.route("/api/random_image")
 def image_list_handler():
     global image_list
+    if not len(image_list):
+        image_list = fetch_image_list()
     random_filename = random.choice(image_list)
     return flask.send_from_directory("data", random_filename)
 
