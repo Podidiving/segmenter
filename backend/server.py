@@ -35,14 +35,14 @@ def add_header(r):
     return r
 
 
-@app.route("/random_image")
+@app.route("/api/random_image")
 def image_list_handler():
     global image_list
     random_filename = random.choice(image_list)
     return flask.send_from_directory("data", random_filename)
 
 
-@app.route("/run_model", methods=["POST"])
+@app.route("/api/run_model", methods=["POST"])
 def run_model():
     def _make_serving_request(preprocessed_image_bytes):
         url = "http://serve:8080/predictions/deeplabv3_resnet_101"
