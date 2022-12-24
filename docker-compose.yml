@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  serve:
+    build: serve
+    container_name: serve
+    command: torchserve --model-store /home/model-server/model-store/ --models deeplabv3_resnet_101=deeplabv3_resnet_101.mar
+    networks:
+      - backend
+  backend:
+    build: backend
+    container_name: backend
+    # command: python server.py
+    volumes:
+      - type: bind
+        source: ./backend/data
+        target: /app/data
+    depends_on:
+      - serve
+    networks:
+      - backend
+      - frontend
+  frontend:
+    build: frontend
+    container_name: frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - frontend
+
+networks:
+  backend: {}
+  frontend: {}
