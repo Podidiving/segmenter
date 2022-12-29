@@ -62,10 +62,15 @@ def run_model():
     if not isinstance(original_image, str):
         return "bad request", 400
 
-    original_image = original_image.split("base64,")[1]
-    original_image = base64.b64decode(original_image)
+    try:
+        original_image = original_image.split("base64,")[1]
+    except IndexError:
+        url = original_image
+        original_image = Image.open(requests.get(url, stream=True).raw)
+    else:
+        original_image = base64.b64decode(original_image)
+        original_image = Image.open(io.BytesIO(original_image))
 
-    original_image = Image.open(io.BytesIO(original_image))
     original_image = original_image.convert("RGB")
 
     raw_image_bytes = io.BytesIO()
